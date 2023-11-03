@@ -14,16 +14,21 @@ import {
   Tags,
   ContainerHeader,
   IconX,
+  NumberInfo,
+  Button,
 } from "./styles";
 import { GET_CONTACT } from "@/context/contact/types";
-import { capitalizeSentence } from "@/utils";
+import { capitalizeSentence, limitCharacter } from "@/utils";
+import { UserData } from "@/interface";
 
 interface ContactProps {
   limit: number;
   offset: number;
   search: string;
   handleDelete: (id: number) => void;
-  handleClick: (id: number) => void;
+  handleChange: (data: UserData) => void;
+  handleAdd: (data: UserData) => void;
+  handleChangeNumber: (id: number, number: string) => void;
 }
 
 function ContactList({
@@ -31,7 +36,9 @@ function ContactList({
   offset,
   search,
   handleDelete,
-  handleClick,
+  handleChange,
+  handleAdd,
+  handleChangeNumber,
 }: ContactProps) {
   const { state, dispatch } = useAppContext();
 
@@ -56,12 +63,14 @@ function ContactList({
       {state.contact
         ? state.contact.map((user: any) => (
             <ContactItem key={user.id}>
-              <ContainerHeader onClick={() => handleClick(user.id)}>
+              <ContainerHeader>
                 <ContactHeader>
                   <div>
                     <Avatar>
                       <AvatarInfo className="contact-name">
-                        {capitalizeSentence(user.first_name.charAt(0))}
+                        {capitalizeSentence(
+                          limitCharacter(user.first_name.charAt(0))
+                        )}
                       </AvatarInfo>
                     </Avatar>
                   </div>
@@ -74,15 +83,23 @@ function ContactList({
                     </ContactName>
                   </div>
                 </ContactHeader>
-                <DeleteButton onClick={() => handleDelete(user.id)}>
-                  <IconX>X</IconX>
-                </DeleteButton>
+                <ContainerHeader>
+                  <Button onClick={() => handleAdd(user)}>Add</Button>
+                  <Button onClick={() => handleChange(user)}>Edit</Button>
+                  <DeleteButton onClick={() => handleDelete(user.id)}>
+                    <IconX>X</IconX>
+                  </DeleteButton>
+                </ContainerHeader>
               </ContainerHeader>
               {user.phones.map((phones: any, index: number) => (
                 <ContactInfo className="contact-phone" key={index}>
                   <Tags>
-                    {/* <AvatarInfo>{phones.number}</AvatarInfo> */}
-                    {phones.number}
+                    <NumberInfo>{phones.number}</NumberInfo>
+                    <Button
+                      onClick={() => handleChangeNumber(user.id, phones.number)}
+                    >
+                      Change Number
+                    </Button>
                   </Tags>
                 </ContactInfo>
               ))}

@@ -31,4 +31,10 @@ const ContactListContainer = styled.div`
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 `;
 
-export { Pagination, ContactListContainer };
+const FontHeader = styled.p`
+  color: ${colors.black50};
+  font-size: 16px;
+  font-weight: bold;
+`;
+
+export { Pagination, ContactListContainer, FontHeader };

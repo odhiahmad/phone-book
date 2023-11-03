@@ -5,11 +5,17 @@ import ContactList from "@/components/contact/ContactList";
 import SearchBox from "@/components/atoms/search";
 import { useMutation } from "@apollo/client";
 import { DELETE_CONTACT_QUERY } from "@/queries";
-import { Pagination, ContactListContainer } from "./styles";
-import ClipLoader from "react-spinners/ClipLoader";
+import { Pagination, ContactListContainer, FontHeader } from "./styles";
 import { DELETE_CONTACT } from "@/context/contact/types";
 import { useAppContext } from "@/context/AppProvider";
 import { useRouter } from "next/router";
+import { SelectBottomSheet } from "@/components/atoms/bottomsheet";
+import { Button } from "@/components/atoms/button";
+import { capitalizeSentence } from "@/utils";
+import { UserData } from "@/interface";
+import FormAddNumber from "@/components/contact/FormAddNumber";
+import FormEditNumber from "@/components/contact/FormEditNumber";
+import FormEditContact from "@/components/contact/FormEditContact";
 
 export default function Home() {
   const override: CSSProperties = {
@@ -23,6 +29,14 @@ export default function Home() {
   const [currentPage, setCurrentPage] = useState(1);
   const [offset, setOffset] = useState(0);
   const [search, setSearch] = useState("");
+  const [open, setOpen] = useState(false);
+  const [openAddNumber, setOpenAddNumber] = useState(false);
+  const [openEditNumber, setOpenEditNumber] = useState(false);
+  const [openEditContact, setOpenEditContact] = useState(false);
+  const [number, setNumber] = useState("");
+  const [id, setId] = useState(0);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [loadingDelete, setLoadingDelete] = useState(false);
   const [mutation] = useMutation(DELETE_CONTACT_QUERY);
   const { dispatch } = useAppContext();
@@ -52,13 +66,34 @@ export default function Home() {
     }
   };
 
-  const handleClick = async (id: number) => {
-    router.push({
-      pathname: "edit-contact",
-      query: {
-        id: id,
-      },
-    });
+  const handleChangeNumber = (id: number, number: string) => {
+    setNumber(number);
+    setId(id);
+    setOpenEditNumber(true);
+  };
+
+  const handleAddNumber = (value: UserData) => {
+    setOpenAddNumber(true);
+    setId(value.id);
+  };
+
+  const handleEditContact = (value: UserData) => {
+    setOpenEditContact(true);
+    setId(value.id);
+    setFirstName(value.first_name);
+    setLastName(value.last_name);
+  };
+
+  const handleOnCloseAddNumber = () => {
+    setOpenAddNumber(false);
+  };
+
+  const handleOnCloseEditNumber = () => {
+    setOpenEditNumber(false);
+  };
+
+  const handleOnCloseEditContact = () => {
+    setOpenEditContact(false);
   };
 
   return (
@@ -67,12 +102,32 @@ export default function Home() {
         <TopBar title="List Contact" />
         <SearchBox onSearch={handleSearch} />
         <FloatingButton url="create-contact" />
+        <FormAddNumber
+          isOpen={openAddNumber}
+          onClose={handleOnCloseAddNumber}
+          id={id}
+        />
+        <FormEditNumber
+          isOpen={openEditNumber}
+          onClose={handleOnCloseEditNumber}
+          id={id}
+          number={number}
+        />
+        <FormEditContact
+          isOpen={openEditContact}
+          onClose={handleOnCloseEditContact}
+          id={id}
+          firstName={firstName}
+          lastName={lastName}
+        />
         <ContactList
           limit={limit}
           offset={offset}
           search={search}
           handleDelete={handleDelete}
-          handleClick={handleClick}
+          handleChange={handleEditContact}
+          handleAdd={handleAddNumber}
+          handleChangeNumber={handleChangeNumber}
         />
 
         <Pagination>
@@ -86,14 +141,6 @@ export default function Home() {
             Next Page
           </button>
         </Pagination>
-        <ClipLoader
-          color={"#ffffff"}
-          loading={loadingDelete}
-          cssOverride={override}
-          size={150}
-          aria-label="Loading Spinner"
-          data-testid="loader"
-        />
       </ContactListContainer>
     </>
   );

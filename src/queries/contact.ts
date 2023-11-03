@@ -110,6 +110,23 @@ const UPDATE_PHONE_NUMBER_CONTACT_QUERY = gql`
   }
 `;
 
+const ADD_NUMBER_TO_CONTACT = gql`
+  mutation AddNumberToContact($contact_id: Int!, $phone_number: String!) {
+    insert_phone(objects: { contact_id: $contact_id, number: $phone_number }) {
+      returning {
+        contact {
+          id
+          last_name
+          first_name
+          phones {
+            number
+          }
+        }
+      }
+    }
+  }
+`;
+
 export {
   CREATE_CONTACT_QUERY,
   DELETE_CONTACT_QUERY,
@@ -117,4 +134,5 @@ export {
   GET_CONTACT_DETAIL_QUERY,
   UPDATE_CONTACT_QUERY,
   UPDATE_PHONE_NUMBER_CONTACT_QUERY,
+  ADD_NUMBER_TO_CONTACT,
 };

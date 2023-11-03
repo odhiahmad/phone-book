@@ -89,7 +89,12 @@ export function Input({
         )}
         {isSelect && (
           <button type="button">
-            <Image src="/down_chevron.svg" alt="Down Chevron" />
+            <Image
+              src="/down_chevron.svg"
+              width={20}
+              height={20}
+              alt="Down Chevron"
+            />
           </button>
         )}
         {error && (

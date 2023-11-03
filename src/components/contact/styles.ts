@@ -35,6 +35,8 @@ const AvatarInfo = styled.p`
   text-align: center;
   vertical-align: middle;
   display: table-cell;
+  text-overflow: ellipsis;
+    max-width: 100px;
 `;
 
 const ContactName = styled.h2`
@@ -42,7 +44,7 @@ const ContactName = styled.h2`
   font-size: 18px;
 `;
 
-const ContactInfo = styled.p`
+const ContactInfo = styled.div`
   color: #777;
   font-size: 16px;
   margin-vertical: 10px;
@@ -74,16 +76,42 @@ const ContainerHeader = styled.div`
   align-items: center;
 `;
 const Tags = styled.div`
-  background-color: ${colors.main};
+  background-color: ${colors.white100};
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
   margin-top: 5px;
+  display: flex;
+  justify-content: space-between;
 `;
 
 const IconX = styled.span`
   content: "X";
 `;
+
+const NumberInfo = styled.p`
+  color: ${colors.black50};
+  font-size: 18px;
+  margin: 0;
+  text-align: center;
+  vertical-align: middle;
+  display: table-cell;
+`;
+
+const Button = styled.button`
+  background: ${colors.main};
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  margin-right: 5px;
+  &:hover {
+    background: #0056b3;
+  }
+`;
+
 export {
   Container,
   ContactItem,
@@ -96,4 +124,6 @@ export {
   Tags,
   ContainerHeader,
   IconX,
+  NumberInfo,
+  Button,
 };

@@ -6,15 +6,11 @@ import { Input } from "@/components/atoms/input";
 import { Button } from "@/components/atoms/button";
 import "react-toastify/dist/ReactToastify.css";
 import { css } from "@emotion/css";
-import { useMutation, useQuery } from "@apollo/client";
-import {
-  GET_CONTACT_DETAIL_QUERY,
-  UPDATE_CONTACT_QUERY,
-  UPDATE_PHONE_NUMBER_CONTACT_QUERY,
-} from "@/queries";
-import { useAppContext } from "@/context/AppProvider";
-import { phoneRegExp, characterOnly } from "@/regex";
+import { useMutation } from "@apollo/client";
+import { UPDATE_CONTACT_QUERY } from "@/queries";
+import { characterOnly } from "@/regex";
 import { useRouter } from "next/router";
+import { SelectBottomSheet } from "../atoms/bottomsheet";
 
 const createSchema = Yup.object().shape({
   first_name: Yup.string()
@@ -25,29 +21,28 @@ const createSchema = Yup.object().shape({
     "Last Name should doesnt have a special character"
   ),
 });
-
-export function FormEditContact() {
+interface Prop {
+  isOpen?: boolean;
+  onClose?: () => void;
+  id: number;
+  firstName: string;
+  lastName: string;
+}
+function FormEditContact({
+  isOpen = false,
+  onClose = () => {},
+  id,
+  firstName,
+  lastName,
+}: Prop) {
   const [loading, setLoading] = useState(false);
-  const { dispatch } = useAppContext();
   const [mutation] = useMutation(UPDATE_CONTACT_QUERY);
-  const [mutationEditPhone] = useMutation(UPDATE_PHONE_NUMBER_CONTACT_QUERY);
   const router = useRouter();
-
-  const {
-    loading: loadingGetDetail,
-    error: errorDetail,
-    data: dataDetail,
-  } = useQuery(GET_CONTACT_DETAIL_QUERY, {
-    variables: {
-      id: router.query.id,
-    },
-  });
 
   const formik = useFormik({
     initialValues: {
       first_name: "",
       last_name: "",
-      number: [""],
     },
     validationSchema: createSchema,
     onSubmit: (values) => {
@@ -56,85 +51,52 @@ export function FormEditContact() {
   });
 
   useEffect(() => {
-    if (!loadingGetDetail) {
-      const contact = dataDetail?.contact_by_pk;
-      const first_name: string = contact?.first_name;
-      const last_name: string = contact?.last_name;
+    formik.setValues({
+      first_name: firstName,
+      last_name: lastName,
+    });
 
-      let dataPhone: any = [];
-      for (const key in contact.phones) {
-        dataPhone.push(contact.phones[key].number);
-      }
-
-      console.log(dataPhone);
-      formik.setValues({
-        first_name: first_name,
-        last_name: last_name,
-        number: dataPhone,
-      });
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loadingGetDetail, dataDetail]);
+  }, [firstName, lastName]);
 
   const onSubmit = async (values: any) => {
     setLoading(true);
-    const phoneNumber = [];
-    for (const key in values.number) {
-      phoneNumber.push({
-        number: values.number[key],
+    try {
+      await mutation({
+        variables: {
+          id: id,
+          _set: {
+            first_name: values.first_name,
+            last_name: values.last_name,
+          },
+        },
       });
+      setLoading(false);
+      toast.success("Berhasil menambahkan kontak", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    } catch (error) {
+      toast.error("Tidak bisa input data", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      setLoading(false);
     }
-    const submit = {
-      id: 1,
-      _set: {
-        first_name: values.first_name,
-        last_name: values.last_name,
-      },
-    };
-
-    if (dataDetail?.contact_by_pk.phone.length !== values.formik.number.lenght)
-      try {
-        const { data } = await mutation({
-          variables: submit,
-        });
-
-        console.log(data);
-        setLoading(false);
-        toast.success("Berhasil menambahkan kontak", {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      } catch (error) {
-        toast.error("Tidak bisa input data", {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-        setLoading(false);
-      }
-  };
-
-  const addInput = () => {
-    formik.values.number.push("");
-    formik.setFieldValue("number", formik.values.number);
-  };
-
-  const removeInput = (index: number) => {
-    formik.values.number.splice(index, 1);
-    formik.setFieldValue("number", formik.values.number);
   };
 
   return (
-    <div>
+    <SelectBottomSheet isOpen={isOpen} onClose={onClose}>
       <form onSubmit={formik.handleSubmit}>
         <ToastContainer
           position="top-center"
@@ -179,33 +141,6 @@ export function FormEditContact() {
             errorMsg={formik.errors.last_name}
             value={formik.values.last_name}
           />
-          {formik.values.number?.map((_, index) => (
-            <div key={index}>
-              <Input
-                disabled={true}
-                id={`number_input[${index}]`}
-                name={`number[${index}]`}
-                colorScheme="grey"
-                placeholder="number"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={
-                  formik.errors.number !== undefined && formik.touched.number
-                }
-                errorMsg={formik.errors.number && formik.errors.number[index]}
-                value={formik.values.number[index]}
-              />
-            </div>
-          ))}
-          <Button
-            id="create-submit"
-            type="submit"
-            fullWidth
-            className="mb-1"
-            onClick={addInput}
-          >
-            Add Phone Number
-          </Button>
         </div>
         <Button
           id="create-submit"
@@ -217,6 +152,8 @@ export function FormEditContact() {
           Create
         </Button>
       </form>
-    </div>
+    </SelectBottomSheet>
   );
 }
+
+export default FormEditContact;

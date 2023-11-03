@@ -8,3 +8,13 @@ export const capitalizeSentence = (sentence: string) => {
   const wordJoin = words.join(" ");
   return wordJoin;
 };
+
+export const limitCharacter = (sentence: string) => {
+  const panjangMaksimum = 10; // Ganti dengan panjang maksimum yang Anda inginkan
+  if (sentence.length > panjangMaksimum) {
+    sentence = sentence.substring(0, panjangMaksimum) + " ...";
+    return sentence;
+  } else {
+    return sentence;
+  }
+};
