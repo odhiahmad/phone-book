@@ -8,7 +8,6 @@ import { DELETE_CONTACT_QUERY } from "@/queries";
 import { Pagination, ContactListContainer } from "@/styles/styles";
 import { DELETE_CONTACT } from "@/context/contact/types";
 import { useAppContext } from "@/context/AppProvider";
-import { useRouter } from "next/router";
 import { UserData } from "@/utils/interface";
 import FormAddNumber from "@/components/contact/FormAddNumber";
 import FormEditNumber from "@/components/contact/FormEditNumber";
@@ -21,7 +20,6 @@ export default function Home() {
     borderColor: "red",
   };
 
-  const router = useRouter();
   const limit = 10;
   const [currentPage, setCurrentPage] = useState(1);
   const [offset, setOffset] = useState(0);
@@ -95,6 +93,7 @@ export default function Home() {
 
   return (
     <>
+      <title>Contact</title>
       <ContactListContainer>
         <TopBar title="List Contact" />
         <SearchBox onSearch={handleSearch} />

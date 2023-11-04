@@ -14,6 +14,7 @@ const Container = styled.div`
 export default function CreateContact() {
   return (
     <Container>
+      <title>Create Contact</title>
       <TopBar title="Create Contact" />
       <FormContact />
     </Container>

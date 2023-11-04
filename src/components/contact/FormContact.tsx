@@ -10,7 +10,6 @@ import { useMutation } from "@apollo/client";
 import { CREATE_CONTACT_QUERY } from "@/queries";
 import { useAppContext } from "@/context/AppProvider";
 import { phoneRegExp, characterOnly } from "@/utils/regex";
-import { CREATE_CONTACT } from "@/context/contact/types";
 
 const createSchema = Yup.object().shape({
   first_name: Yup.string()
@@ -51,7 +50,6 @@ export function FormContact() {
       const { data } = await mutation({
         variables: submit,
       });
-      dispatch({ type: CREATE_CONTACT, payload: data.contact });
       setLoading(false);
       toast.success("Berhasil menambahkan kontak", {
         position: "top-center",
