@@ -1,4 +1,3 @@
-import * as React from "react";
 import Styles from "./styles";
 import Image from "next/image";
 import { useRouter } from "next/router";

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { toast, ToastContainer } from "react-toastify";
@@ -8,7 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { css } from "@emotion/css";
 import { useMutation } from "@apollo/client";
 import { UPDATE_PHONE_NUMBER_CONTACT_QUERY } from "@/queries";
-import { phoneRegExp } from "@/regex";
+import { phoneRegExp } from "@/utils/regex";
 import { SelectBottomSheet } from "../atoms/bottomsheet";
 
 const createSchema = Yup.object().shape({
@@ -29,7 +29,7 @@ function FormEditNumber({
   id,
   number,
 }: Prop) {
-  const [loading, setLoading] = React.useState(false);
+  const [loading, setLoading] = useState(false);
   const [mutation] = useMutation(UPDATE_PHONE_NUMBER_CONTACT_QUERY);
 
   const onSubmit = async (values: any) => {

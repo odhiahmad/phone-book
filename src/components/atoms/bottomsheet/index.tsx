@@ -1,13 +1,9 @@
-import * as React from "react";
 import Sheet from "react-modal-sheet";
 import { css } from "@emotion/css";
-import { INode } from "@/types";
+import { INode } from "@/utils/types";
 
 interface PropTypes {
   value?: string | number | undefined | null;
-  options?: {
-    label: string | number;
-  }[];
   title?: string | undefined;
   isOpen?: boolean;
   onClose?: () => void;
@@ -15,7 +11,6 @@ interface PropTypes {
 }
 
 export function SelectBottomSheet({
-  options = [],
   isOpen = false,
   onClose = () => {},
   children = null,

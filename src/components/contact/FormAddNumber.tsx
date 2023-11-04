@@ -8,7 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { css } from "@emotion/css";
 import { useMutation } from "@apollo/client";
 import { ADD_NUMBER_TO_CONTACT } from "@/queries";
-import { phoneRegExp } from "@/regex";
+import { phoneRegExp } from "@/utils/regex";
 import { SelectBottomSheet } from "../atoms/bottomsheet";
 
 const createSchema = Yup.object().shape({

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useQuery } from "@apollo/client";
 import { GET_CONTACT_QUERY } from "@/queries";
 import { useAppContext } from "@/context/AppProvider";
@@ -18,8 +18,8 @@ import {
   Button,
 } from "./styles";
 import { GET_CONTACT } from "@/context/contact/types";
-import { capitalizeSentence, limitCharacter } from "@/utils";
-import { UserData } from "@/interface";
+import { capitalizeSentence, limitCharacter } from "@/utils/utils";
+import { UserData } from "@/utils/interface";
 
 interface ContactProps {
   limit: number;

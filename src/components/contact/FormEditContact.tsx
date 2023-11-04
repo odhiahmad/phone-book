@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { toast, ToastContainer } from "react-toastify";
@@ -8,7 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { css } from "@emotion/css";
 import { useMutation } from "@apollo/client";
 import { UPDATE_CONTACT_QUERY } from "@/queries";
-import { characterOnly } from "@/regex";
+import { characterOnly } from "@/utils/regex";
 import { useRouter } from "next/router";
 import { SelectBottomSheet } from "../atoms/bottomsheet";
 

@@ -1,4 +1,4 @@
-import { colors, sizes, zIndexs } from "../../../styles/variables";
+import { colors, sizes, zIndexs } from "@/styles/variables";
 import styled from "@emotion/styled";
 
 const Styles = styled.div`

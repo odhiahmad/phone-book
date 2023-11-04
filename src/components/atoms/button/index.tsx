@@ -1,5 +1,5 @@
 import ButtonStyles from "./styles";
-import { INode } from "@/types";
+import { INode } from "@/utils/types";
 
 export interface PropTypes {
   id: string;

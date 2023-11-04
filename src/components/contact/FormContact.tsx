@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { toast, ToastContainer } from "react-toastify";
@@ -9,7 +9,7 @@ import { css } from "@emotion/css";
 import { useMutation } from "@apollo/client";
 import { CREATE_CONTACT_QUERY } from "@/queries";
 import { useAppContext } from "@/context/AppProvider";
-import { phoneRegExp, characterOnly } from "@/regex";
+import { phoneRegExp, characterOnly } from "@/utils/regex";
 import { CREATE_CONTACT } from "@/context/contact/types";
 
 const createSchema = Yup.object().shape({
@@ -29,7 +29,7 @@ const createSchema = Yup.object().shape({
 });
 
 export function FormContact() {
-  const [loading, setLoading] = React.useState(false);
+  const [loading, setLoading] = useState(false);
   const { state, dispatch } = useAppContext();
   const [mutation] = useMutation(CREATE_CONTACT_QUERY);
 
