@@ -15,3 +15,5 @@ bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+You can access the Phone Book App Here [https://phone-book-eta-five.vercel.app/]
