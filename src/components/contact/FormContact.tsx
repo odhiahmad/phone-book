@@ -60,8 +60,9 @@ export function FormContact() {
         draggable: true,
         progress: undefined,
       });
-    } catch (error) {
-      toast.error("Tidak bisa input data", {
+    } catch (error: any) {
+      console.error("Apollo Client Error:", error.message);
+      toast.error(error.message, {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
